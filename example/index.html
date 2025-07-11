@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>smart-idle Demo</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-gray-900 text-white font-sans p-8">
+  <div class="max-w-3xl mx-auto space-y-6">
+    <h1 class="text-3xl font-bold text-center">🛌 smart-idle - Demo</h1>
+
+    <div class="bg-gray-800 p-6 rounded-xl shadow-xl space-y-4">
+      <div>
+        <label class="block text-sm mb-1" for="timeout">Idle Timeout (ms):</label>
+        <input id="timeout" type="number" value="5000" class="w-full p-2 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-purple-500" />
+      </div>
+
+      <div class="flex flex-wrap gap-3 justify-center">
+        <button id="startBtn" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition">Start</button>
+        <button id="stopBtn" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition">Stop</button>
+        <button id="pauseBtn" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition">Pause</button>
+        <button id="resumeBtn" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition">Resume</button>
+        <button id="resetBtn" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition">Reset</button>
+        <button id="destroyBtn" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition">Destroy</button>
+        <button id="triggerIdleBtn" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition">Force Idle</button>
+      </div>
+
+      <div class="mt-4">
+        <p class="text-sm text-gray-400">Status:</p>
+        <div id="status" class="text-lg font-semibold text-green-400">Active</div>
+      </div>
+
+      <div class="mt-2">
+        <p class="text-sm text-gray-400">Last Action:</p>
+        <div id="log" class="text-sm text-gray-300 italic">--</div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { SmartIdle } from '../dist/SmartIdle.mjs';
+
+    let idle;
+    const statusEl = document.getElementById('status');
+    const logEl = document.getElementById('log');
+    const timeoutInput = document.getElementById('timeout');
+
+    const log = (msg) => {
+      logEl.textContent = msg;
+    };
+
+    const updateStatus = (isIdle) => {
+      statusEl.textContent = isIdle ? 'Idle' : 'Active';
+      statusEl.className = isIdle ? 'text-red-400 font-semibold' : 'text-green-400 font-semibold';
+    };
+
+    function createIdleInstance() {
+      return new SmartIdle({
+        timeout: parseInt(timeoutInput.value, 10),
+        onIdle: () => {
+          log('User went idle');
+          updateStatus(true);
+        },
+        onActive: () => {
+          log('User is active');
+          updateStatus(false);
+        },
+        events: ['mousemove', 'keydown', 'scroll', 'click'],
+      });
+    }
+
+    document.getElementById('startBtn').addEventListener('click', () => {
+      if (!idle) idle = createIdleInstance();
+      idle.start();
+      log('Tracking started');
+    });
+
+    document.getElementById('stopBtn').addEventListener('click', () => {
+      idle?.stop();
+      log('Tracking stopped');
+    });
+
+    document.getElementById('pauseBtn').addEventListener('click', () => {
+      idle?.pause();
+      log('Tracking paused');
+    });
+
+    document.getElementById('resumeBtn').addEventListener('click', () => {
+      idle?.resume();
+      log('Tracking resumed');
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      idle?.reset();
+      log('Timer reset');
+    });
+
+    document.getElementById('destroyBtn').addEventListener('click', () => {
+      idle?.destroy();
+      idle = null;
+      updateStatus(false);
+      log('Instance destroyed');
+    });
+
+    document.getElementById('triggerIdleBtn').addEventListener('click', () => {
+      idle?.triggerIdle();
+      log('Manually triggered idle state');
+      updateStatus(true);
+    });
+  </script>
+</body>
+</html>

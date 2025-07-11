@@ -1,0 +1,32 @@
+{
+  "name": "smart-idle",
+  "version": "1.0.0",
+  "description": "Lightweight browser library to detect user inactivity with event dispatching",
+  "main": "dist/SmartIdle.cjs",
+  "module": "dist/SmartIdle.mjs",
+  "types": "dist/SmartIdle.d.ts",
+  "files": [
+    "dist",
+    "bin",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsup src/SmartIdle.ts --dts --format esm,cjs --out-dir dist"
+  },
+  "bin": {
+    "smart-idle": "./bin/cli.js"
+  },
+  "keywords": [
+    "idle",
+    "user-inactivity",
+    "timeout",
+    "javascript",
+    "typescript"
+  ],
+  "author": "ward-00",
+  "license": "MIT",
+  "devDependencies": {
+    "tsup": "^7.2.0",
+    "typescript": "^5.3.0"
+  }
+}
