@@ -21,7 +21,6 @@
         <button id="stopBtn" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition">Stop</button>
         <button id="pauseBtn" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition">Pause</button>
         <button id="resumeBtn" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition">Resume</button>
-        <button id="resetBtn" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition">Reset</button>
         <button id="destroyBtn" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition">Destroy</button>
         <button id="triggerIdleBtn" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition">Force Idle</button>
       </div>
@@ -39,7 +38,7 @@
   </div>
 
   <script type="module">
-    import { SmartIdle } from '../dist/SmartIdle.mjs';
+    import { SmartIdle } from 'https://cdn.jsdelivr.net/npm/smart-idle/+esm';
 
     let idle;
     const statusEl = document.getElementById('status');
@@ -89,11 +88,6 @@
     document.getElementById('resumeBtn').addEventListener('click', () => {
       idle?.resume();
       log('Tracking resumed');
-    });
-
-    document.getElementById('resetBtn').addEventListener('click', () => {
-      idle?.reset();
-      log('Timer reset');
     });
 
     document.getElementById('destroyBtn').addEventListener('click', () => {
